@@ -1,0 +1,35 @@
+
+.Collage {
+  position: relative;
+  background-color: lightgray;
+  box-shadow: 0 0 0.5em #aaa inset;
+  overflow: hidden;
+
+  .wrap {
+    position: absolute;
+    background: white;
+    box-shadow: 0 0 5px 5px #bbb;
+
+    .row {
+      white-space: nowrap;
+      .cell{
+        display: inline-block;
+        position: relative;
+        border: 2px ridge rgba(0, 0, 0, 0.1);
+
+        &:after {
+          content: "IMG";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: lightgray;
+          font-size: 50px;
+          font-weight: bold;
+          font-family: monospace;
+        }
+      }
+    }
+  }
+
+}

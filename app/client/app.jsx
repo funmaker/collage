@@ -1,8 +1,11 @@
 import React from 'react'
-import {Route, Switch, withRouter} from "react-router";
+import {Redirect, Route, Switch, withRouter} from "react-router";
 import {setInitialData} from "./helpers/initialData";
 import isNode from 'detect-node';
 import Index from "./routes/index";
+import Editor from "./routes/editor";
+import Preview from "./routes/preview";
+import ErrorPage from "./routes/error";
 
 class App extends React.Component {
 	constructor({initialData}) {
@@ -26,9 +29,16 @@ class App extends React.Component {
 	}
 	
 	render() {
+
+		if(this.props.initialData._error) {
+			return <ErrorPage error={this.props.initialData._error} />;
+		}
+
 		return (
 			<Switch>
                 <Route path="/" exact component={Index}/>
+                <Route path="/collage/:collage" exact component={Preview}/>
+                <Route path="/collage/:collage/editor" exact component={Editor}/>
 			</Switch>
 		)
 	}

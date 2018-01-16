@@ -17,6 +17,10 @@ export function reactMiddleware(req, res, next) {
         res.header('Expires', '-1');
         res.header('Pragma', 'no-cache');
 
+        if(initialData._error){
+            res.status(initialData._error.status);
+        }
+
         switch(req.accepts(['json', 'html'])) {
             case "json":
                 res.json(initialData);

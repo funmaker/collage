@@ -1,0 +1,31 @@
+.editorPage {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+
+  & > .content {
+    flex: 1;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+
+    .Collage {
+      flex: auto;
+    }
+
+    .settingsWarn {
+      float: right;
+      text-align: right;
+      white-space: nowrap;
+      font-weight: normal;
+      color: rgba(255, 0, 0, 0.6);
+    }
+  }
+
+  & > .ThreadBrowser {
+    flex: 1;
+    max-width: 800px;
+    margin: 1em 1em 1em 0 !important;
+    overflow: hidden;
+  }
+}
