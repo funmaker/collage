@@ -33,10 +33,11 @@ const versions = [`
     
     CREATE TABLE images(
         id SERIAL PRIMARY KEY,
+        collages_id INTEGER REFERENCES collages(id),
         source_url TEXT,
         data TEXT NOT NULL,
-        posx INTEGER NOT NULL,
-        posy INTEGER NOT NULL,
+        posx INTEGER,
+        posy INTEGER,
         rows INTEGER NOT NULL,
         columns INTEGER NOT NULL
     );
@@ -44,6 +45,7 @@ const versions = [`
 ];
 
 async function clearDatabase(pool) {
+    console.warn("!!!CLEARING DATABASE!!!");
     await pool.query(`
         DROP OWNED BY collage;
     `);

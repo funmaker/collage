@@ -4,11 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { AppContainer } from 'react-hot-loader'
 import App from "./client/app";
 import './client/style/style.less';
+import 'cropperjs/dist/cropper.css';
 
 const initialData = JSON.parse(document.getElementById('initialData').innerHTML);
 
 const render = () => {
-    ReactDOM.render(
+    ReactDOM.hydrate(
         <AppContainer>
             <BrowserRouter>
                 <App initialData={initialData} />

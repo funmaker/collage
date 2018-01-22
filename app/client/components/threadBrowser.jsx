@@ -2,8 +2,9 @@ import React from 'react'
 import {Button, Dimmer, Divider, Header, Icon, Image, Input, Item, Loader, Reveal, Segment} from "semantic-ui-react";
 import filesize from 'filesize';
 import requestJSON from "../helpers/requestJSON";
+import qs from "querystring";
 
-export const Post = ({post, board, thread}) => (
+export const Post = ({post, board, thread, onImagePick}) => (
     <Item className={`Post ${location.hash === "#p"+post.no ? "selected" : ""}`}>
         <Item.Content id={"p"+post.no}>
             <Item.Header>
@@ -14,7 +15,7 @@ export const Post = ({post, board, thread}) => (
                     <Item.Meta>
                         File: <a href={`//i.4cdn.org/${board}/${post.tim}${post.ext}`}>{post.filename}{post.ext}</a> ({filesize(post.fsize)} {post.w}x{post.h})
                     </Item.Meta>
-                    <Item.Image>
+                    <Item.Image onClick={() => onImagePick(`/4chan/image?${qs.stringify({board, filename: `${post.tim}${post.ext}`})}`)}>
                         <Image src={`//t.4cdn.org/${board}/${post.tim}s.jpg`}/>
                         <Dimmer active>
                             <Icon name='add' />
@@ -24,7 +25,7 @@ export const Post = ({post, board, thread}) => (
                 </React.Fragment>
             : null}
             <Item.Description dangerouslySetInnerHTML={{__html: post.com}} />
-            {post.replies.length ? <Item.Extra> Replies: {post.replies.map(reply => <a href={"#p"+reply}>>>{reply}</a>)} </Item.Extra> : null}
+            {post.replies.length ? <Item.Extra> Replies: {post.replies.map(reply => <a href={"#p"+reply} key={reply}>>>{reply}</a>)} </Item.Extra> : null}
         </Item.Content>
     </Item>
 );
@@ -37,7 +38,7 @@ export default class ThreadBrowser extends React.Component {
             posts: [],
             board: null,
             thread: null,
-            url: "https://boards.4chan.org/jp/thread/18205684",
+            url: "",
             loading: false,
         };
 
@@ -59,7 +60,7 @@ export default class ThreadBrowser extends React.Component {
         });
 
         const resposne = await requestJSON({
-            pathname: "/4chan",
+            pathname: "/4chan/thread",
             search: {board: parsed[1], thread: parsed[2]}
         });
 
@@ -90,27 +91,26 @@ export default class ThreadBrowser extends React.Component {
     }
 
     render() {
-        const posts = this.state.posts.map(post => <Post post={post} key={post.no} board={this.state.board} thread={this.state.thread} />);
+        const posts = this.state.posts.map(post => <Post post={post} key={post.no} board={this.state.board} thread={this.state.thread} onImagePick={this.props.onImagePick} />);
 
         return (
-            <Segment className="ThreadBrowser">
-                <div className="header">
+            <Segment.Group className="ThreadBrowser" >
+                <Segment className="header">
                     <Button floated="right" onClick={this.fetch}>Fetch Thread</Button>
                     <Input fluid
                            placeholder="http://boards.4chan.org/a/thread/..."
                            onChange={(ev, {value}) => this.setState({url: value})}
                     />
-                    <Divider />
-                </div>
-                <div className="thread">
+                </Segment>
+                <Segment className="thread">
                     <Item.Group divided>
                         {posts}
                     </Item.Group>
-                    <Dimmer active={this.state.loading} inverted>
+                    <Dimmer active={this.state.loading || this.props.showLoader} inverted>
                         <Loader size="massive" />
                     </Dimmer>
-                </div>
-            </Segment>
+                </Segment>
+            </Segment.Group>
         );
     }
 }

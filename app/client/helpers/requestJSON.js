@@ -18,7 +18,7 @@ export default async function requestJSON({method, href, host, pathname, search,
     method = method || "GET";
 
     const response = await axios({
-        method: method.toLowerCase(),
+        method: method.toUpperCase(),
         url: href,
         cancelToken: cancelCb ? new CancelToken(cancelCb) : undefined,
         data

@@ -13,7 +13,7 @@ import * as db from "./server/db";
     const hbs = expressHandlebars.create({});
 
     app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(bodyParser.json({}));
+    app.use(bodyParser.json({limit: "10mb"}));
 
     app.use(expressSession({
         store: new (pgSession(expressSession))({ pool: await db.pool }),
@@ -37,7 +37,6 @@ import * as db from "./server/db";
     app.use(require('./server/helpers/reactHelper').reactMiddleware);
 
     app.use('/', require("./server/routes/index").router);
-    app.use('/editor', require("./server/routes/editor").router);
     app.use('/4chan', require("./server/routes/4chan").router);
     app.use('/collage', require("./server/routes/collage").router);
 

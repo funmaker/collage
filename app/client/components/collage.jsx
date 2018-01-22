@@ -1,5 +1,5 @@
 import React from 'react';
-import {Visibility} from "semantic-ui-react";
+import {Dimmer, Loader, Visibility} from "semantic-ui-react";
 
 
 
@@ -13,10 +13,16 @@ export default class Collage extends React.Component {
             posy: 0,
             canvasWidth: 100,
             canvasHeight: 100,
+            drag: null,
+            dragSize: {x: null, y: null},
+            loading: false,
         };
 
         this.handleUpdate = this.handleUpdate.bind(this);
         this.onWheel = this.onWheel.bind(this);
+        this.onMouseMove = this.onMouseMove.bind(this);
+        this.onDragStart = this.onDragStart.bind(this);
+        this.onDrop = this.onDrop.bind(this);
     }
 
     handleUpdate(e, {calculations}) {
@@ -40,6 +46,69 @@ export default class Collage extends React.Component {
         })
     };
 
+    onMouseMove(e) {
+        if((e.buttons & 1) === 0) return;
+        if(e.target.tagName === "IMG") return;
+
+        const {posx, posy, canvasWidth, canvasHeight} = this.state;
+
+        this.setState({
+            posx: posx + e.nativeEvent.movementX / canvasWidth,
+            posy: posy + e.nativeEvent.movementY / canvasHeight,
+        })
+    }
+
+    onDragStart(e, img) {
+        e.nativeEvent.dataTransfer.setData("text", img.id);
+        const canvas = document.createElement("canvas");
+        canvas.width = this.props.collage.img_width / this.props.collage.img_height * 100 * img.columns * this.calculateZoom(this.state.zoom);
+        canvas.height = 100 * img.rows * this.calculateZoom(this.state.zoom);
+        canvas.getContext("2d").drawImage(e.target, 0, 0, canvas.width, canvas.height);
+        e.nativeEvent.dataTransfer.setDragImage(canvas, canvas.width/2/img.columns, canvas.height/2/img.rows);
+        this.setState({
+            dragSize: {x: img.columns, y: img.rows}
+        });
+    }
+
+    async onDrop(e, targetX, targetY) {
+        e.stopPropagation();
+
+        let dropImage = this.props.images.find(el => el.id === parseInt(e.nativeEvent.dataTransfer.getData("text")));
+
+        if(targetX === dropImage.posx && targetY === dropImage.posy) return;
+
+        this.setState({
+            loading: true,
+        });
+
+        if(targetX !== null && targetY !== null) {
+            if(targetX + dropImage.columns > this.props.collage.columns || targetY + dropImage.rows > this.props.collage.rows) {
+                this.setState({
+                    drag: null,
+                    loading: false,
+                });
+                return;
+            }
+
+            for(let image of this.props.images) {
+                if(image.posx !== null && image.posy !== null
+                    && image.posx < targetX + dropImage.columns
+                    && image.posx + image.columns > targetX
+                    && image.posy < targetY + dropImage.rows
+                    && image.posy + image.rows > targetY) {
+                    await this.props.moveImage(image.id, null, null);
+                }
+            }
+        }
+
+        await this.props.moveImage(dropImage.id, targetX, targetY);
+
+        this.setState({
+            drag: null,
+            loading: false,
+        });
+    }
+
     calculateZoom(zoom) {
         const {collage} = this.props;
         const {canvasWidth, canvasHeight} = this.state;
@@ -48,7 +117,7 @@ export default class Collage extends React.Component {
     }
 
     render() {
-        const {collage} = this.props;
+        const {collage, images} = this.props;
         const {zoom, posx, posy, canvasWidth, canvasHeight} = this.state;
 
         if(!collage){
@@ -71,19 +140,58 @@ export default class Collage extends React.Component {
         for(let r = 0; r < collage.rows; r++) {
             const cells = [];
             for(let c = 0; c < collage.columns; c++) {
-                cells.push(<div className="cell" key={c} style={cellStyle} />)
+                const {drag, dragSize} = this.state;
+                const hover = drag && c >= drag.c && c < drag.c + dragSize.x && r >= drag.r && r < drag.r + dragSize.y;
+                cells.push(
+                    <div className={"cell " + (hover ? "dragHover" : "")}
+                         key={c}
+                         style={cellStyle}
+                         onDragEnter={e => {e.stopPropagation(); this.setState({drag: {r, c}});}}
+                         onDragOver={e => {e.stopPropagation(); e.preventDefault();}}
+                         onDragExit={e => {e.stopPropagation(); this.setState({drag: null});}}
+                         onDrop={e => this.onDrop(e, c, r)} />
+                )
             }
             rows.push(<div className="row" key={r}>{cells}</div>)
         }
 
+        const generateImg = img => (
+            <img className="collageImage"
+                 key={img.id}
+                 src={img.data}
+                 height={img.rows * 100}
+                 draggable={true}
+                 onDragStart={e => this.onDragStart(e, img)}
+                 onDragEnd={() => this.setState({drag: null})}
+                 style={img.posx !== null ? {
+                     left: img.posx * collage.img_width / collage.img_height * 100 + "px",
+                     top: img.posy * 100 + "px",
+                 } : undefined} />
+        );
+
+        const collageImages = images.filter(img => img.posx !== null && img.posy !== null).map(generateImg);
+        const extraImages = images.filter(img => img.posx === null || img.posy === null).map(generateImg);
+
         return (
-            <Visibility className="Collage"
+            <Visibility className={"Collage " + (this.state.drag === "out" ? "dragHover " : "") + (this.state.drag ? "anyDrag " : "")}
                         onUpdate={this.handleUpdate}
                         onWheel={this.onWheel}
+                        onMouseMove={this.onMouseMove}
+                        onDrop={e => this.onDrop(e, null, null)}
+                        onDragEnter={() => this.setState({drag: "out"})}
+                        onDragOver={e => e.preventDefault()}
+                        onDragExit={() => this.setState({drag: null})}
                         fireOnMount>
                 <div className="wrap" style={wrapStyle}>
                     {rows}
+                    {collageImages}
+                    <div className="extraImages">
+                        {extraImages}
+                    </div>
                 </div>
+                <Dimmer active={this.state.loading}>
+                    <Loader size="massive" />
+                </Dimmer>
             </Visibility>
         );
     }
