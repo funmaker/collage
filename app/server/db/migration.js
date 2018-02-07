@@ -24,6 +24,7 @@ const versions = [`
         url_name TEXT NOT NULL UNIQUE,
         author TEXT NOT NULL,
         password TEXT NOT NULL,
+        hidden BOOLEAN NOT NULL,
         
         rows INTEGER DEFAULT 5,
         columns INTEGER DEFAULT 3,

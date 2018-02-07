@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimmer, Loader, Visibility} from "semantic-ui-react";
+import {Dimmer, Icon, Loader, Visibility} from "semantic-ui-react";
 
 
 
@@ -23,6 +23,7 @@ export default class Collage extends React.Component {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onDragStart = this.onDragStart.bind(this);
         this.onDrop = this.onDrop.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
 
     handleUpdate(e, {calculations}) {
@@ -109,6 +110,23 @@ export default class Collage extends React.Component {
         });
     }
 
+    async onDelete(e) {
+        e.stopPropagation();
+
+        let dropImage = this.props.images.find(el => el.id === parseInt(e.nativeEvent.dataTransfer.getData("text")));
+
+        this.setState({
+            loading: true,
+        });
+
+        await this.props.removeImage(dropImage.id);
+
+        this.setState({
+            drag: null,
+            loading: false,
+        });
+    }
+
     calculateZoom(zoom) {
         const {collage} = this.props;
         const {canvasWidth, canvasHeight} = this.state;
@@ -173,7 +191,7 @@ export default class Collage extends React.Component {
         const extraImages = images.filter(img => img.posx === null || img.posy === null).map(generateImg);
 
         return (
-            <Visibility className={"Collage " + (this.state.drag === "out" ? "dragHover " : "") + (this.state.drag ? "anyDrag " : "")}
+            <Visibility className={"Collage " + (this.state.drag === "out" ? "dragHover " : "") + (this.state.drag ? "anyDrag " : "") + (this.props.readOnly ? "readOnly " : "")}
                         onUpdate={this.handleUpdate}
                         onWheel={this.onWheel}
                         onMouseMove={this.onMouseMove}
@@ -187,6 +205,13 @@ export default class Collage extends React.Component {
                     {collageImages}
                     <div className="extraImages">
                         {extraImages}
+                    </div>
+                    <div className={"remove " + (this.state.drag === "delete" ? "dragHover " : "")}
+                         onDragEnter={e => {e.stopPropagation(); this.setState({drag: "delete"});}}
+                         onDragOver={e => {e.stopPropagation(); e.preventDefault();}}
+                         onDragExit={e => {e.stopPropagation(); this.setState({drag: null});}}
+                         onDrop={e => this.onDelete(e)} >
+                        <Icon name="remove" />
                     </div>
                 </div>
                 <Dimmer active={this.state.loading}>

@@ -25,7 +25,10 @@ module.exports = [{
                 use: [{
                     loader: 'babel-loader',
                     options: {
-                        presets: ["react", "env"]
+                        presets: ["react", "env"],
+                        plugins: [
+                            'transform-object-rest-spread'
+                        ]
                     }
                 }]
             }, {
@@ -37,6 +40,12 @@ module.exports = [{
                     fallback: "style-loader",
                     use: ["css-loader", "less-loader"]
                 })
+            }, {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
             }
         ]
     },
@@ -71,6 +80,9 @@ module.exports = [{
                         presets: [
                             "react",
                             ["env", {targets: {node: "current"}}]
+                        ],
+                        plugins: [
+                            'transform-object-rest-spread'
                         ]
                     }
                 }]

@@ -2,22 +2,31 @@ import React from 'react'
 import {fetchInitialData, getInitialData} from "../helpers/initialData";
 import {Accordion, Button, Form, Icon, Input} from "semantic-ui-react";
 import qs from 'querystring';
-import ThreadBrowser from "../components/threadBrowser";
-import Collage from "../components/collage";
+import ThreadBrowser from "../components/ThreadBrowser";
+import Collage from "../components/Collage";
 import FormIterator from "../helpers/FormIterator";
 import requestJSON from "../helpers/requestJSON";
 import ImageClipper from "../components/ImageClipper";
 import Cropper from 'react-cropper';
 import ImageImport from "../components/ImageImport";
+import PasswordModal from "../components/PasswordModal";
 
 export default class Editor extends React.Component {
     constructor() {
         super();
 
+        const settings = getInitialData() ? getInitialData().collage : {
+            rows: 0,
+            columns: 0,
+            img_width: 0,
+            img_height: 0,
+        };
+
         this.state = {
             activeIndex: 0,
             clipImage: null,
             loading: false,
+            settings,
             ...getInitialData(),
         };
 
@@ -25,13 +34,17 @@ export default class Editor extends React.Component {
         this.submitSettings = this.submitSettings.bind(this);
         this.onImageClip = this.onImageClip.bind(this);
         this.onMoveImage = this.onMoveImage.bind(this);
+        this.onRemoveImage = this.onRemoveImage.bind(this);
         this.onImageImport = this.onImageImport.bind(this);
+        this.onLogin = this.onLogin.bind(this);
     }
 
     async componentDidMount() {
+        const initialData = await fetchInitialData();
         this.setState({
-            ...await fetchInitialData(),
+            ...initialData,
             ...this.state,
+            settings: initialData.collage,
         });
     }
 
@@ -84,8 +97,6 @@ export default class Editor extends React.Component {
     }
 
     async onMoveImage(id, posx, posy) {
-        let image = this.state.images.find(img => img.id === id);
-
         const result = await requestJSON({
             method: "PATCH",
             pathname: `/collage/${this.props.match.params.collage}/image/${id}`,
@@ -98,6 +109,21 @@ export default class Editor extends React.Component {
         this.setState({
             images: [...this.state.images.filter(img => img.id !== id), result.image],
         })
+    }
+
+    async onRemoveImage(id, posx, posy) {
+        await requestJSON({
+            method: "DELETE",
+            pathname: `/collage/${this.props.match.params.collage}/image/${id}`
+        });
+
+        this.setState({
+            images: [...this.state.images.filter(img => img.id !== id)],
+        })
+    }
+
+    onLogin() {
+        this.setState({hasAccess: true});
     }
 
     async submitSettings(e) {
@@ -140,8 +166,11 @@ export default class Editor extends React.Component {
     render() {
         const {activeIndex} = this.state;
 
+        const settings = this.state.settings;
         const collage = this.state.collage || {};
         const images = this.state.images || [];
+
+        const updateSettings = name => (e, {value}) => this.setState({settings: {...settings, [name]: value}});
 
         return (
             <div className="editorPage">
@@ -152,15 +181,15 @@ export default class Editor extends React.Component {
                     <Accordion.Content active={activeIndex === 0}>
                         <Form onSubmit={this.submitSettings}>
                             <Form.Group widths='equal'>
-                                <Form.Input fluid label='Rows' type="number" name="rows" defaultValue={collage.rows} min="1"/>
-                                <Form.Input fluid label='Columns' type="number" name="columns" defaultValue={collage.columns} min="1"/>
+                                <Form.Input fluid label='Columns' type="number" name="columns" value={settings.columns} onChange={updateSettings("columns")} min="1"/>
+                                <Form.Input fluid label='Rows' type="number" name="rows" value={settings.rows} onChange={updateSettings("rows")} min="1"/>
                                 <Form.Field>
                                     <label>Cell Width</label>
-                                    <Input fluid label="px" labelPosition="right" type="number" name="img_width" defaultValue={collage.img_width} min="5"/>
+                                    <Input fluid label="px" labelPosition="right" type="number" name="img_width" value={settings.img_width} onChange={updateSettings("img_width")} min="5"/>
                                 </Form.Field>
                                 <Form.Field>
                                     <label>Cell Height</label>
-                                    <Input fluid label="px" labelPosition="right" type="number" name="img_height" defaultValue={collage.img_height} min="5"/>
+                                    <Input fluid label="px" labelPosition="right" type="number" name="img_height" value={settings.img_height} onChange={updateSettings("img_height")} min="5"/>
                                 </Form.Field>
                             </Form.Group>
                             <Form.Group>
@@ -173,7 +202,7 @@ export default class Editor extends React.Component {
                         </Form>
                     </Accordion.Content>
 
-                    <Collage collage={this.state.collage} images={images} moveImage={this.onMoveImage} />
+                    <Collage collage={this.state.collage} images={images} moveImage={this.onMoveImage} removeImage={this.onRemoveImage} />
 
                     <Accordion.Title active={activeIndex === 1} index={1} onClick={this.openMenu}>
                         <Icon name='dropdown' /> Import External Image
@@ -189,13 +218,13 @@ export default class Editor extends React.Component {
                         <Form>
                             <Form.Group>
                                 <Form.Field width={4}>
-                                    <Button as="a" href={`/collage/${this.props.match.params.collage}/4chan`} target="_blank" fluid>4Chan Size</Button>
+                                    <Button as="a" href={`/collage/${this.props.match.params.collage}/4chan`} target="_blank" fluid>4Chan Friendly</Button>
                                 </Form.Field>
                                 <Form.Field width={4}>
-                                    <Button as="a" href={`/collage/${this.props.match.params.collage}/half`} target="_blank" fluid>Half Size</Button>
+                                    <Button as="a" href={`/collage/${this.props.match.params.collage}/jpeg`} target="_blank" fluid>Full Jpeg</Button>
                                 </Form.Field>
                                 <Form.Field width={4}>
-                                    <Button as="a" href={`/collage/${this.props.match.params.collage}/full`} target="_blank" fluid>Full Size</Button>
+                                    <Button as="a" href={`/collage/${this.props.match.params.collage}/png`} target="_blank" fluid>Full Png</Button>
                                 </Form.Field>
                                 <Form.Field width={4}>
                                     <Button as="a" href={`/collage/${this.props.match.params.collage}/`} target="_blank" fluid primary>Live Preview</Button>
@@ -212,6 +241,8 @@ export default class Editor extends React.Component {
                               onDone={this.onImageClip}
                               width={collage.img_width}
                               height={collage.img_height} />
+
+                <PasswordModal open={!this.state.hasAccess} urlName={this.props.match.params.collage} onLogin={this.onLogin} />
             </div>
         )
     }

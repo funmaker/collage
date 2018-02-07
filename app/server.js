@@ -1,4 +1,5 @@
 import express from "express";
+import expressWs from 'express-ws';
 import expressSession from "express-session";
 import pgSession from 'connect-pg-simple';
 import expressHandlebars from 'express-handlebars';
@@ -10,6 +11,7 @@ import * as db from "./server/db";
     await db.pool;
 
     const app = express();
+    expressWs(app);
     const hbs = expressHandlebars.create({});
 
     app.use(bodyParser.urlencoded({ extended: false }));

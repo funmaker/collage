@@ -17,6 +17,7 @@ export default async function requestJSON({method, href, host, pathname, search,
     href = href || `//${host}${pathname}${search}`;
     method = method || "GET";
 
+
     const response = await axios({
         method: method.toUpperCase(),
         url: href,

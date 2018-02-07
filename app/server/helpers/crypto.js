@@ -7,5 +7,5 @@ export function hash(pass, salt = defaultSalt) {
 }
 
 export function compare(pass, encrypted) {
-    return new Promise((res, rej) => bcrypt.compare(data, encrypted, (err, result) => err ? rej(err) : res(result)))
+    return new Promise((res, rej) => bcrypt.compare(pass, encrypted, (err, result) => err ? rej(err) : res(result)))
 }

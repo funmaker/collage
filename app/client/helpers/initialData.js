@@ -4,8 +4,6 @@ let initialData = null;
 let cancel = null;
 
 export function setInitialData(data) {
-    if(cancel) cancel();
-    cancel = null;
     initialData = data;
 }
 
@@ -16,7 +14,8 @@ export function getInitialData() {
 }
 
 export function fetchInitialData() {
-    if(initialData !== null) return initialData;
+    if(cancel) cancel();
+    cancel = null;
 
     return initialData = requestJSON({
         cancelCb: cancelFn => cancel = cancelFn,

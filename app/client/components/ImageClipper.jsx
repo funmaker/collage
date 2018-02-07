@@ -39,8 +39,8 @@ export default class ImageClipper extends Component {
         });
 
         const img = this.cropper.getCroppedCanvas({
-            width: this.props.width * this.state.rows,
-            height: this.props.height * this.state.columns,
+            width: this.props.width * this.state.columns,
+            height: this.props.height * this.state.rows,
         });
 
         await this.props.onDone(img, this.state.rows, this.state.columns);

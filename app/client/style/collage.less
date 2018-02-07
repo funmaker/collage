@@ -20,6 +20,19 @@
     pointer-events: none;
   }
 
+  &.anyDrag .wrap > .remove {
+    opacity: 0.3;
+    &.dragHover {
+      opacity: 1;
+    }
+  }
+
+  &.readOnly {
+    .wrap {
+      pointer-events: none;
+    }
+  }
+
   .wrap {
     position: absolute;
     background: white;
@@ -88,6 +101,23 @@
         transform: translate(-100%, 0);
         box-shadow: 0 0 5px 5px #bbb;
         border-radius: 10px;
+      }
+    }
+
+    & > .remove {
+      position: absolute;
+      top: 0;
+      right: -125px;
+      width: 100px;
+      font-size: 100px;
+      opacity: 0;
+      color: red;
+
+      .icon {
+        position: relative;
+        top: 35px;
+        left: -8px;
+        pointer-events: none;
       }
     }
   }

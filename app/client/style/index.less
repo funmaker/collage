@@ -1,10 +1,59 @@
 
 .IndexPage {
   height: 100%;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding-bottom: 1em;
 
   .hint {
     font-weight: bold;
     padding: 3px;
     cursor: pointer;
+  }
+  .loginForm {
+    flex: 0;
+  }
+
+  .logo {
+    flex: 1;
+    position: relative;
+    div {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+  }
+
+  .recentlyAdded {
+    flex: 1;
+    display: flex;
+
+    .content {
+      flex: 1;
+      position: relative;
+      overflow: auto;
+
+      .items {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 1em;
+
+        .item {
+          font-size: 125%;
+          color: black;
+
+          span {
+            float: right;
+          }
+        }
+      }
+    }
   }
 }
