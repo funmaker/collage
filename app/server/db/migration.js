@@ -46,6 +46,13 @@ const versions = [`
     ALTER TABLE collages DROP CONSTRAINT IF EXISTS collages_name_key;
     `,`
     ALTER TABLE images ADD COLUMN hash TEXT;
+    `,`
+    ALTER TABLE images
+    DROP CONSTRAINT images_collages_id_fkey,
+    ADD CONSTRAINT images_collages_id_fkey
+       FOREIGN KEY (collages_id)
+       REFERENCES collages(id)
+       ON DELETE CASCADE;
     `
 ];
 
