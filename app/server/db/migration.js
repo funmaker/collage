@@ -42,6 +42,8 @@ const versions = [`
         rows INTEGER NOT NULL,
         columns INTEGER NOT NULL
     );
+    `,`
+    ALTER TABLE collages DROP CONSTRAINT IF EXISTS collages_name_key;
     `
 ];
 

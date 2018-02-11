@@ -1,29 +1,22 @@
-# Webapp Boilerplate
+# Collage Generator for 4chan
 
-Basic boilerplate for isomorphic React web apps. Including:
-- Node.js
-- React
-- Webpack
-- Less
-- Babel
-- Handlebars
+Features:
+- Creating and modifying collages
+- Fetching images directly from threads
+- Embedded 4chan browser
+- Cropping images
+- Live preview
 
 ## Usage
 
 ### Run development
-
+Requires PostgreSQL with `collage` as db name, user name and password.
 ```bash
-npm run start
+cd app && npm run start
 ```
 
-### Build production
+### Run production
 
 ```bash
-npm run build:prod
-```
-
-### Start production
-
-```bash
-npm run start:prod
+docker-compose up
 ```

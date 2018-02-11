@@ -1,6 +1,6 @@
 import React from 'react'
 import {fetchInitialData, getInitialData} from "../helpers/initialData";
-import {Accordion, Button, Form, Icon, Input} from "semantic-ui-react";
+import {Accordion, Button, Form, Icon, Input, Message} from "semantic-ui-react";
 import qs from 'querystring';
 import ThreadBrowser from "../components/ThreadBrowser";
 import Collage from "../components/Collage";
@@ -10,6 +10,7 @@ import ImageClipper from "../components/ImageClipper";
 import Cropper from 'react-cropper';
 import ImageImport from "../components/ImageImport";
 import PasswordModal from "../components/PasswordModal";
+import {Redirect} from "react-router";
 
 export default class Editor extends React.Component {
     constructor() {
@@ -26,6 +27,7 @@ export default class Editor extends React.Component {
             activeIndex: 0,
             clipImage: null,
             loading: false,
+            redirect: null,
             settings,
             ...getInitialData(),
         };
@@ -37,6 +39,7 @@ export default class Editor extends React.Component {
         this.onRemoveImage = this.onRemoveImage.bind(this);
         this.onImageImport = this.onImageImport.bind(this);
         this.onLogin = this.onLogin.bind(this);
+        this.deleteCollage = this.deleteCollage.bind(this);
     }
 
     async componentDidMount() {
@@ -126,6 +129,18 @@ export default class Editor extends React.Component {
         this.setState({hasAccess: true});
     }
 
+    async deleteCollage(e) {
+        e.preventDefault();
+
+        if(!confirm("Are you sure you want to delete this collage?")) return;
+
+        await requestJSON({
+            method: "DELETE",
+            pathname: `/collage/${this.props.match.params.collage}`
+        });
+        this.setState({redirect: "/"});
+    }
+
     async submitSettings(e) {
         e.preventDefault();
 
@@ -136,30 +151,45 @@ export default class Editor extends React.Component {
             if(!confirm("This operation will remove all imported images.\nDo you wish to continue?")) return;
         }
 
-        const result = await requestJSON({
-            method: "POST",
-            pathname: `/collage/${this.props.match.params.collage}/update`,
-            data,
-        });
-
-        console.log(result);
-
-        if(data.resetImages) {
-            this.setState({
-                collage: {
-                    ...this.state.collage,
-                    ...data,
-                },
-                images: []
+        try {
+            const result = await requestJSON({
+                method: "POST",
+                pathname: `/collage/${this.props.match.params.collage}/update`,
+                data,
             });
-        } else {
-            this.setState({
-                collage: {
-                    ...this.state.collage,
-                    ...data,
-                },
-                images: this.state.images.map(image => result.movedImages.includes(image.id) ? {...image, posx: null, posy: null} : image)
-            });
+
+            if (data.resetImages) {
+                this.setState({
+                    collage: {
+                        ...this.state.collage,
+                        ...data,
+                    },
+                    images: []
+                });
+            } else {
+                this.setState({
+                    collage: {
+                        ...this.state.collage,
+                        ...data,
+                    },
+                    images: this.state.images.map(image => result.movedImages.includes(image.id) ? {
+                        ...image,
+                        posx: null,
+                        posy: null
+                    } : image)
+                });
+            }
+        } catch (e) {
+            console.log(e);
+            if(e.response && e.response.status === 400) {
+                return this.setState({
+                    error: e.response.data.error
+                });
+            } else {
+                return this.setState({
+                    error: e.message
+                })
+            }
         }
     }
 
@@ -174,12 +204,14 @@ export default class Editor extends React.Component {
 
         return (
             <div className="editorPage">
+                {this.state.redirect ? <Redirect to={this.state.redirect} push /> : null}
                 <Accordion className="content" fluid styled>
                     <Accordion.Title active={activeIndex === 0} index={0} onClick={this.openMenu}>
                         <Icon name='dropdown' /> Collage Settings
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
                         <Form onSubmit={this.submitSettings}>
+                            {this.state.error ? <Message negative onDismiss={()=>this.setState({error:null})}>{this.state.error}</Message> : null}
                             <Form.Group widths='equal'>
                                 <Form.Input fluid label='Columns' type="number" name="columns" value={settings.columns} onChange={updateSettings("columns")} min="1"/>
                                 <Form.Input fluid label='Rows' type="number" name="rows" value={settings.rows} onChange={updateSettings("rows")} min="1"/>
@@ -193,7 +225,11 @@ export default class Editor extends React.Component {
                                 </Form.Field>
                             </Form.Group>
                             <Form.Group>
-                                <Form.Input width={12} label='Collage title' name="name" defaultValue={collage.name}/>
+                                <Form.Field width={4}>
+                                    <label>&nbsp;</label>
+                                    <Button fluid secondary onClick={this.deleteCollage}>Delete Collage</Button>
+                                </Form.Field>
+                                <Form.Input width={8} label='Collage title' name="name" value={settings.name} onChange={updateSettings("name")}/>
                                 <Form.Field width={4}>
                                     <label className="settingsWarn">Changing cell dimensions will remove all imported images*</label>
                                     <Button fluid type='submit' primary>Update</Button>
@@ -242,7 +278,7 @@ export default class Editor extends React.Component {
                               width={collage.img_width}
                               height={collage.img_height} />
 
-                <PasswordModal open={!this.state.hasAccess} urlName={this.props.match.params.collage} onLogin={this.onLogin} />
+                <PasswordModal open={this.state.hasAccess === false} urlName={this.props.match.params.collage} onLogin={this.onLogin} />
             </div>
         )
     }

@@ -317,6 +317,18 @@ router.get('/:url_name/editor', async (req, res) => {
     }
 
     initialData.hasAccess = req.session.access && req.session.access.includes(req.params.url_name);
+    initialData.hasAccess = !!initialData.hasAccess;
+
+    res.react(initialData);
+});
+
+router.delete('/:url_name', async (req, res) => {
+    const initialData = {};
+
+    if(!req.session.access || !req.session.access.includes(req.params.url_name)) throw new HTTPError(401);
+
+    const {rows} = await db.query("DELETE FROM collages WHERE url_name = $1 RETURNING 1", [req.params.url_name]);
+    if (rows.length === 0) throw new HTTPError(404);
 
     res.react(initialData);
 });
@@ -382,9 +394,14 @@ router.get('/:url_name', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
-    let urlName = req.body.title.replace(/^[^a-zA-Z0-9]*/, "").replace(/[^a-zA-Z0-9]*$/, "").replace(/[^a-zA-Z0-9]/g, "-");
+    let urlName = req.body.title.replace(/^[^a-zA-Z0-9]*/, "").replace(/[^a-zA-Z0-9]*$/, "").replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase();
     if(!urlName){
         return void res.status(400).json({ error: "Title cannot be empty." });
+    }
+
+    {
+        const {rows} = await db.query(`SELECT 1 FROM collages WHERE url_name = $1 OR name = $2`, [urlName, req.body.title]);
+        if(rows.length > 0) return void res.status(400).json({ error: "Collage name already in use." });
     }
 
     const {rows} = await db.query(`INSERT INTO collages(name, url_name, author, hidden, password) VALUES ($1, $2, $3, $4, $5) RETURNING *`,

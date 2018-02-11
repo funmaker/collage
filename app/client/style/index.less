@@ -1,56 +1,91 @@
 
 .IndexPage {
+  width: 100%;
   height: 100%;
-  width: 450px;
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
-  padding-bottom: 1em;
 
-  .hint {
-    font-weight: bold;
-    padding: 3px;
+  .githubIcon {
+    display: block;
+    color: black;
+    position: absolute;
+    right: 0.5em;
+    bottom: 0.5em;
     cursor: pointer;
-  }
-  .loginForm {
-    flex: 0;
-  }
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.5;
+    transition: opacity 0.1s ease;
 
-  .logo {
-    flex: 1;
-    position: relative;
-    div {
-      position: absolute;
-      bottom: 0;
+    .icon {
+      display: block;
+      font-size: 74px;
+      margin: 0;
       width: 100%;
+
+      &::before {
+        line-height: 1em;
+      }
+    }
+
+    &:hover {
+      opacity: 1;
     }
   }
 
-  .recentlyAdded {
-    flex: 1;
-    display: flex;
 
-    .content {
+  .mainColumn {
+    height: 100%;
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding-bottom: 1em;
+
+
+    .hint {
+      font-weight: bold;
+      padding: 3px;
+      cursor: pointer;
+    }
+    .loginForm {
+      flex: 0;
+    }
+
+    .logo {
       flex: 1;
       position: relative;
-      overflow: auto;
-
-      .items {
+      div {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
         bottom: 0;
-        padding: 1em;
+        width: 100%;
+      }
+    }
 
-        .item {
-          font-size: 125%;
-          color: black;
+    .recentlyAdded {
+      flex: 1;
+      display: flex;
 
-          span {
-            float: right;
+      .content {
+        flex: 1;
+        position: relative;
+        overflow: auto;
+
+        .items {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 1em;
+
+          .item {
+            font-size: 125%;
+            color: black;
+
+            span {
+              float: right;
+            }
           }
         }
       }
