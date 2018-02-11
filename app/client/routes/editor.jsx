@@ -66,10 +66,6 @@ export default class Editor extends React.Component {
             loading: true,
         });
 
-        if(img instanceof File) {
-
-        }
-
         image.onload = () => {
             this.setState({
                 clipImage: image,
@@ -84,7 +80,7 @@ export default class Editor extends React.Component {
             method: "POST",
             pathname: `/collage/${this.props.match.params.collage}/image`,
             data: {
-                source_url: this.state.clipImage.src.length > 1024 ? null : this.state.clipImage.src,
+                source_url: this.state.clipImage.src.startsWith("http") ? this.state.clipImage.src : null,
                 data: image.toDataURL('image/jpeg'),
                 posx: null,
                 posy: null,
@@ -276,7 +272,8 @@ export default class Editor extends React.Component {
                               onClose={() => this.setState({clipImage: null})}
                               onDone={this.onImageClip}
                               width={collage.img_width}
-                              height={collage.img_height} />
+                              height={collage.img_height}
+                              urlName={this.props.match.params.collage} />
 
                 <PasswordModal open={this.state.hasAccess === false} urlName={this.props.match.params.collage} onLogin={this.onLogin} />
             </div>

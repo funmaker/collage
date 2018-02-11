@@ -44,6 +44,8 @@ const versions = [`
     );
     `,`
     ALTER TABLE collages DROP CONSTRAINT IF EXISTS collages_name_key;
+    `,`
+    ALTER TABLE images ADD COLUMN hash TEXT;
     `
 ];
 

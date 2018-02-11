@@ -29,6 +29,7 @@
   "express-session": "^1.15.6",
   "express-ws": "^3.0.0",
   "filesize": "^3.5.11",
+  "hamming-distance": "^1.0.0",
   "node-cache": "^4.1.1",
   "node-http-error": "^2.0.0",
   "pg": "^7.4.1",
@@ -43,7 +44,8 @@
   "react-router-dom": "^4.2.2",
   "semantic-ui-react": "^0.77.2",
   "stream-buffers": "^3.0.1",
-  "webpack-node-externals": "^1.6.0"
+  "webpack-node-externals": "^1.6.0",
+  "imghash": "latest"
  },
  "devDependencies": {
   "babel-cli": "^6.26.0",

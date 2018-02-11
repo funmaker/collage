@@ -6,6 +6,7 @@ Features:
 - Embedded 4chan browser
 - Cropping images
 - Live preview
+- Duplicates detection based on perceptual hash
 
 ## Usage
 

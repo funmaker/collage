@@ -23,4 +23,39 @@
       }
     }
   }
+
+  .duplicateTitle {
+    font-weight: bold;
+    font-size: 150%;
+  }
+
+  .duplicateWrapper {
+    text-align: left;
+    margin-bottom: 1em;
+
+    .duplicate {
+      display: inline-block;
+      position: relative;
+      margin: 0.5em;
+      cursor: pointer;
+      box-shadow: 1px 3px 3px 0 rgba(0,0,0,.2),1px 3px 5px 2px rgba(0,0,0,.2);
+
+      span{
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 0 2px;
+        background: rgba(256, 256, 256, 0.5);
+        border-radius: 0 0 0 3px;
+      }
+
+      img {
+        max-height: 100px;
+      }
+    }
+  }
+
+  .ui.loader::after {
+    border-color: #767676 transparent transparent !important;
+  }
 }

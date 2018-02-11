@@ -5,6 +5,9 @@ import { createCanvas, loadImage } from 'canvas';
 import NodeCache from "node-cache";
 import StreamBuffer from 'stream-buffers';
 import promisePipe from 'promisepipe';
+import axios from "axios/index";
+import imgHash from 'imghash';
+import hamming from 'hamming-distance';
 
 const imageCache = new NodeCache();
 
@@ -231,13 +234,26 @@ router.post('/:url_name/image', async (req, res) => {
 
     if(!req.session.access || !req.session.access.includes(req.params.url_name)) throw new HTTPError(401);
 
+    let hash = null;
+    if(req.body.source_url){
+        const response = await axios.get(req.body.source_url, {
+            responseType: 'arraybuffer',
+        });
+        const buffer = Buffer.from(response.data);
+        hash = await imgHash.hash(buffer);
+    } else {
+        const matches = req.body.data.match(/^data:.+;base64,(.*)$/);
+        const buffer = new Buffer(matches[1], 'base64');
+        hash = await imgHash.hash(buffer);
+    }
+
     const {rows} = await db.query(`
-        INSERT INTO images(collages_id, source_url, data, posx, posy, rows, columns)
-        SELECT collages.id, $1, $2, $3, $4, $5, $6
+        INSERT INTO images(collages_id, source_url, data, posx, posy, rows, columns, hash)
+        SELECT collages.id, $1, $2, $3, $4, $5, $6, $7
         FROM collages
-        WHERE url_name = $7
+        WHERE url_name = $8
         RETURNING *`,
-        [req.body.source_url, req.body.data, req.body.posx, req.body.posy, req.body.rows, req.body.columns, req.params.url_name]);
+        [req.body.source_url, req.body.data, req.body.posx, req.body.posy, req.body.rows, req.body.columns, hash, req.params.url_name]);
     if(rows.length === 0) throw new HTTPError(404);
 
     initialData.image = rows[0];
@@ -246,6 +262,39 @@ router.post('/:url_name/image', async (req, res) => {
     broadcastToLive(req.params.url_name, {
         newImage: initialData.image
     });
+
+    res.json(initialData);
+});
+
+router.post('/:url_name/imageCheck', async (req, res) => {
+    const initialData = {};
+
+    if(!req.session.access || !req.session.access.includes(req.params.url_name)) throw new HTTPError(401);
+
+    const url = req.body.url;
+    const response = await axios.get(url, {
+        responseType: 'arraybuffer',
+    });
+    const buffer = Buffer.from(response.data);
+    const hash = await imgHash.hash(buffer);
+
+    const {rows: images} = await db.query(`
+        SELECT images.hash, images.data
+        FROM images 
+        JOIN collages ON images.collages_id = collages.id
+        WHERE url_name = $1`, [req.params.url_name]);
+
+    initialData.images = [];
+
+    for(let image of images) {
+        initialData.images.push({
+            data: image.data,
+            diff: hamming(hash, image.hash)
+        });
+    }
+
+    initialData.images.sort((a,b) => a.diff - b.diff);
+    initialData.images = initialData.images.filter(img => img.diff <= 16);
 
     res.json(initialData);
 });
