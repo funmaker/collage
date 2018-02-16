@@ -73,7 +73,8 @@ router.get('/:url_name/4chan', async (req, res) => {
         .map(image => loadImage(image.data)
             .then(loaded => {
                 ctx.drawImage(loaded, image.posx * img_width, image.posy * img_height, img_width * image.columns, img_height * image.rows);
-            })));
+            })
+            .then(() => new Promise(res => setTimeout(res, 0)))));
 
 
     let quality = 100 + 5;
@@ -126,8 +127,9 @@ router.get('/:url_name/jpeg', async (req, res) => {
     await Promise.all(images.filter(img => img.posx !== null && img.posy !== null)
         .map(image => loadImage(image.data)
             .then(loaded => {
-                ctx.drawImage(loaded, image.posx * collage.img_width, image.posy * collage.img_height);
-            })));
+                ctx.drawImage(loaded, image.posx * collage.img_width, image.posy * collage.img_height, collage.img_width * image.columns, collage.img_height * image.rows);
+            })
+            .then(() => new Promise(res => setTimeout(res, 0)))));
 
     const streamBuffer = new StreamBuffer.WritableStreamBuffer();
     await promisePipe(canvas.jpegStream(), streamBuffer);
@@ -171,8 +173,9 @@ router.get('/:url_name/png', async (req, res) => {
     await Promise.all(images.filter(img => img.posx !== null && img.posy !== null)
         .map(image => loadImage(image.data)
             .then(loaded => {
-                ctx.drawImage(loaded, image.posx * collage.img_width, image.posy * collage.img_height);
-            })));
+                ctx.drawImage(loaded, image.posx * collage.img_width, image.posy * collage.img_height, collage.img_width * image.columns, collage.img_height * image.rows);
+            })
+            .then(() => new Promise(res => setTimeout(res, 0)))));
 
     const streamBuffer = new StreamBuffer.WritableStreamBuffer();
     await promisePipe(canvas.pngStream(), streamBuffer);

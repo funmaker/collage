@@ -58,11 +58,11 @@ export default class Preview extends React.Component {
                             <Form.Field width={4}>
                                 <Button as="a" href={`/collage/${this.props.match.params.collage}/4chan`} target="_blank" fluid>4Chan Size</Button>
                             </Form.Field>
-                            <Form.Field width={3}>
-                                <Button as="a" href={`/collage/${this.props.match.params.collage}/half`} target="_blank" fluid>Half Size</Button>
+                            <Form.Field width={4}>
+                                <Button as="a" href={`/collage/${this.props.match.params.collage}/jpeg`} target="_blank" fluid>Full Jpeg</Button>
                             </Form.Field>
-                            <Form.Field width={3}>
-                                <Button as="a" href={`/collage/${this.props.match.params.collage}/full`} target="_blank" fluid>Full Size</Button>
+                            <Form.Field width={4}>
+                                <Button as="a" href={`/collage/${this.props.match.params.collage}/png`} target="_blank" fluid>Full Png</Button>
                             </Form.Field>
                             <Form.Field width={3}>
                                 <Button as={Link} to={`/collage/${this.props.match.params.collage}/editor`} fluid primary>Edit</Button>
