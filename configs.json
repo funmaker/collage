@@ -1,0 +1,10 @@
+{
+	"port": 3939,
+	"db": {
+		"user": "collage",
+		"host": "localhost",
+		"database": "collage",
+		"password": "collage",
+		"port": 5432
+	}
+}

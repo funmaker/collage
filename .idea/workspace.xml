@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="06604412-10b9-47fe-aa3d-be44a68b5d76" name="Default" comment="Added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/app/client/routes/preview.jsx" afterPath="$PROJECT_DIR$/app/client/routes/preview.jsx" />
       <change beforePath="$PROJECT_DIR$/app/server/routes/collage.js" afterPath="$PROJECT_DIR$/app/server/routes/collage.js" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" afterPath="$PROJECT_DIR$/docker-compose.yml" />
+=======
+    <list default="true" id="221f04a4-e0c4-4d33-bccf-7030b020a67e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+>>>>>>> boilerplate/master
     </list>
-    <ignored path="$PROJECT_DIR$/.tmp/" />
-    <ignored path="$PROJECT_DIR$/temp/" />
-    <ignored path="$PROJECT_DIR$/tmp/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="collage.js" pinned="false" current-in-tab="true">
@@ -53,11 +58,23 @@
     </findStrings>
     <replaceStrings>
       <replace />
+=======
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>react-dom</find>
+      <find>@hot-loader/react-dom</find>
+      <find>&quot;tar&quot;</find>
+      <find>[absolute-resource-path]</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>[resource-path]</replace>
+>>>>>>> boilerplate/master
     </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< HEAD
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -276,11 +293,17 @@
         </subPane>
       </pane>
     </panes>
+=======
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="SZMByDTH" />
+>>>>>>> boilerplate/master
   </component>
+  <component name="ProjectId" id="1RT0a8VaXRGqfwgr0Bx8p5F1d3i" />
   <component name="PropertiesComponent">
-    <property name="nodejs_interpreter_path" value="/usr/bin/node" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
     <property name="javascript.nodejs.core.library.configured.version" value="9.2.0" />
@@ -299,6 +322,10 @@
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/client/style" />
     </key>
+=======
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+>>>>>>> boilerplate/master
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -316,109 +343,59 @@
     <configuration default="true" type="BashConfigurationType" factoryName="Bash">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="INTERPRETER_PATH" value="/sbin/bash" />
+      <option name="PROJECT_INTERPRETER" value="false" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <module name="" />
-      <envs />
-      <method />
+      <method v="2" />
     </configuration>
     <configuration default="true" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run" />
+      <option name="allFeatures" value="false" />
       <option name="nocapture" value="true" />
+      <option name="emulateTerminal" value="false" />
       <option name="backtrace" value="SHORT" />
       <envs />
-      <method />
+      <method v="2" />
     </configuration>
-    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
-      <method />
-    </configuration>
-    <configuration default="true" type="DartTestRunConfigurationType" factoryName="Dart Test">
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
-      <node-interpreter value="project" />
-      <working-dir value="" />
-      <envs />
-      <scope-kind value="ALL" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma">
-      <config-file value="" />
-      <node-interpreter value="project" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
-      <config-file value="" />
-      <node-interpreter value="project" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
-    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
-      <method />
-    </configuration>
-    <configuration default="true" type="cucumber.js" factoryName="Cucumber.js">
-      <option name="cucumberJsArguments" value="" />
-      <option name="executablePath" />
-      <option name="filePath" />
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
-      <command value="run" />
-      <scripts />
-      <node-interpreter value="project" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <working-directory />
-      <pass-parent-env>true</pass-parent-env>
-      <envs />
-      <ui />
-      <extra-mocha-options />
-      <test-kind>DIRECTORY</test-kind>
-      <test-directory />
-      <recursive>false</recursive>
-      <method />
-    </configuration>
-    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+    <configuration default="true" type="js.build_tools.gulp">
       <node-interpreter>project</node-interpreter>
       <node-options />
       <gulpfile />
       <tasks />
       <arguments />
       <envs />
+      <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="Start" type="js.build_tools.npm" factoryName="npm">
       <package-json value="$PROJECT_DIR$/app/package.json" />
+=======
+    <configuration name="Start" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+>>>>>>> boilerplate/master
       <command value="run" />
       <scripts>
         <script value="start" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
+      <method v="2" />
     </configuration>
-  </component>
-  <component name="ShelveChangesManager" show_recycled="false">
-    <option name="remove_strategy" value="false" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="06604412-10b9-47fe-aa3d-be44a68b5d76" name="Default" comment="" />
-      <created>1514122319278</created>
+      <changelist id="221f04a4-e0c4-4d33-bccf-7030b020a67e" name="Default Changelist" comment="" />
+      <created>1556618168468</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+<<<<<<< HEAD
       <updated>1514122319278</updated>
       <workItem from="1514122320589" duration="16119000" />
       <workItem from="1514222155563" duration="994000" />
@@ -521,6 +498,23 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937366" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
+=======
+      <updated>1556618168468</updated>
+      <workItem from="1556618171205" duration="4149000" />
+      <workItem from="1556622492109" duration="35000" />
+      <workItem from="1556622707059" duration="319000" />
+      <workItem from="1556623797874" duration="909000" />
+      <workItem from="1556888603270" duration="1314000" />
+      <workItem from="1557224588664" duration="22000" />
+      <workItem from="1557225943806" duration="627000" />
+      <workItem from="1557231084124" duration="636000" />
+      <workItem from="1557766001439" duration="243000" />
+      <workItem from="1562071965730" duration="676000" />
+      <workItem from="1569675841895" duration="2220000" />
+    </task>
+    <servers />
+  </component>
+>>>>>>> boilerplate/master
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
@@ -529,6 +523,7 @@
       <map>
         <entry key="MAIN">
           <value>
+<<<<<<< HEAD
             <State>
               <option name="RECENTLY_FILTERED_USER_GROUPS">
                 <collection />
@@ -545,10 +540,14 @@
                 </list>
               </option>
             </State>
+=======
+            <State />
+>>>>>>> boilerplate/master
           </value>
         </entry>
       </map>
     </option>
+<<<<<<< HEAD
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -919,5 +918,7 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> boilerplate/master
   </component>
 </project>

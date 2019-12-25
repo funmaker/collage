@@ -1,0 +1,30 @@
+@import "editor";
+@import "threadBrowser";
+@import "index";
+@import "collage";
+@import "imageClipper";
+@import "preview";
+@import "passwordModal";
+
+body {
+  background-color: #f4f4f4;
+}
+
+:not(.image) > .dimmer.active:not(.modals):not(.instant) {
+  animation-duration: 1s;
+  animation-delay: 0.5s;
+  animation-name: showDimmer;
+  animation-timing-function: ease-in;
+  pointer-events: none;
+}
+
+@keyframes showDimmer {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

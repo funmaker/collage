@@ -1,0 +1,126 @@
+
+.Collage {
+  position: relative;
+  background-color: lightgray;
+  box-shadow: 0 0 0.5em #aaa inset;
+  overflow: hidden;
+  cursor: move;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: box-shadow 0.1s ease;
+  line-height: 0;
+
+  &.dragHover {
+    box-shadow: 0 0 0.5em #1678c2 inset;
+  }
+
+  &.anyDrag .collageImage {
+    pointer-events: none;
+  }
+
+  &.anyDrag .wrap > .remove {
+    opacity: 0.3;
+    &.dragHover {
+      opacity: 1;
+    }
+  }
+
+  &.readOnly {
+    .wrap {
+      pointer-events: none;
+    }
+  }
+
+  .wrap {
+    position: absolute;
+    background: white;
+    box-shadow: 0 0 5px 5px #bbb;
+
+    .row {
+      white-space: nowrap;
+      .cell{
+        display: inline-block;
+        position: relative;
+        border: 2px ridge rgba(0, 0, 0, 0.1);
+
+        &::before {
+          // box-shadow: 0 0 0.5em #1678c2 inset;
+          background-color: rgba(22, 120, 194, 0.33);
+          content: "";
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          z-index: 10;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.1s ease;
+        }
+
+        &.dragHover::before {
+          opacity: 1;
+        }
+
+        &::after {
+          content: "IMG";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: lightgray;
+          font-size: 50px;
+          font-weight: bold;
+          font-family: monospace;
+        }
+      }
+    }
+
+    .collageImage {
+      position: absolute;
+      transition: box-shadow 0.1s ease;
+
+      &:hover {
+        box-shadow: 0 0 10px #1678c2 !important;
+        z-index: 1;
+      }
+    }
+
+    .extraImages{
+      position: absolute;
+      top: 0;
+      left: -25px;
+      text-align: right;
+      width: 0;
+
+      .collageImage {
+        position: relative;
+        margin-bottom: 25px;
+        transform: translate(-100%, 0);
+        box-shadow: 0 0 5px 5px #bbb;
+        border-radius: 10px;
+      }
+    }
+
+    & > .remove {
+      position: absolute;
+      top: 0;
+      right: -125px;
+      width: 100px;
+      font-size: 100px;
+      opacity: 0;
+      color: red;
+
+      .icon {
+        position: relative;
+        top: 35px;
+        left: -8px;
+        pointer-events: none;
+      }
+    }
+  }
+
+}
