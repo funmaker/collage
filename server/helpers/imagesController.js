@@ -52,7 +52,7 @@ export async function requestImage(id, dirname, filename, options) {
   await promise;
 }
 
-async function generateImage(id, imagePath, { format, maxSize, maxFilesize }) {
+async function generateImage(id, imagePath, { format, maxSize, maxFileSize }) {
   let collage;
   {
     const { rows } = await db.query(`
@@ -112,28 +112,32 @@ async function generateImage(id, imagePath, { format, maxSize, maxFilesize }) {
   
   await fs.promises.mkdir(path.dirname(imagePath), { recursive: true });
   
-  if(!maxFilesize) {
-    if(format === "png") await promisePipe(canvas.createJPEGStream(), fs.createWriteStream(imagePath));
-    else await promisePipe(canvas.createPNGStream(), fs.createWriteStream(imagePath));
+  if(!maxFileSize) {
+    if(format === "png") await promisePipe(canvas.createPNGStream(), fs.createWriteStream(imagePath));
+    else await promisePipe(canvas.createJPEGStream(), fs.createWriteStream(imagePath));
   } else {
     let n = 1;
-    for(let scale = 1; scale > 0; scale = scale - 0.125) {
+    let buffer;
+    for(let scale = 1; scale > 0; scale -= 0.125) {
       let newWidth = Math.floor(width * scale);
       let newHeight = Math.floor(height * scale);
     
       const newCanvas = createCanvas(newWidth, newHeight);
       const newCtx = newCanvas.getContext('2d');
+      console.log(0, 0, newWidth, newHeight);
       await newCtx.drawImage(canvas, 0, 0, newWidth, newHeight);
-    
+  
       const streamBuffer = new StreamBuffer.WritableStreamBuffer();
-      if(format === "png") await promisePipe(canvas.createJPEGStream({ quality: 0.75 }), streamBuffer);
-      else await promisePipe(canvas.createPNGStream(), fs.createWriteStream(imagePath));
-      const buffer = streamBuffer.getContents();
+      if(format === "png") await promisePipe(newCanvas.createPNGStream(), streamBuffer);
+      else await promisePipe(newCanvas.createJPEGStream({ quality: 0.75 }), streamBuffer);
+      buffer = streamBuffer.getContents();
     
       console.log(`Try ${n++}: scale=${scale} size=${Math.floor(buffer.length / 10) / 100}`);
     
-      if(buffer.length < maxFilesize) break;
+      if(buffer.length < maxFileSize) break;
     }
+    
+    await fs.promises.writeFile(imagePath, buffer);
   }
   
   generatedImages.set(imagePath, { generated: true });
