@@ -20,7 +20,7 @@
 	"dependencies": {
 		"axios": "^0.21.2",
 		"bcrypt-nodejs": "0.0.3",
-		"body-parser": "^1.19.0",
+		"body-parser": "^1.20.2",
 		"canvas": "^2.6.1",
 		"chalk": "latest",
 		"compression": "^1.7.4",
