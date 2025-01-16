@@ -20,7 +20,7 @@ export default class PreviewPage extends React.Component {
     });
     
     if(!isNode) {
-      this.ws = new WebSocket(`ws://${location.host}/collage/${this.props.match.params.collage}/live`);
+      this.ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/collage/${this.props.match.params.collage}/live`);
       this.ws.addEventListener('message', msg => this.handleMessage(JSON.parse(msg.data)));
     }
   }
