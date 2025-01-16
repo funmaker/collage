@@ -38,7 +38,7 @@
 		"imghash": "0.0.5",
 		"morgan": "^1.9.1",
 		"node-cache": "^5.1.0",
-		"pg": "^7.14.0",
+		"pg": "^8.13.1",
 		"promisepipe": "^3.0.0",
 		"prop-types": "^15.7.2",
 		"query-string": "^6.9.0",
