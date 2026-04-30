@@ -80,7 +80,7 @@
 		"style-loader": "^1.1.1",
 		"webpack": "^4.41.4",
 		"webpack-cli": "^3.3.10",
-		"webpack-dev-middleware": "^3.7.2",
+		"webpack-dev-middleware": "^8.0.3",
 		"webpack-hot-middleware": "^2.25.0",
 		"webpack-node-externals": "^1.7.2"
 	},
